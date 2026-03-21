@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bloqueio Governamental de CPF para Cassinos | Pare com as Apostas</title>
+    <meta name="description" content="Bloqueio governamental na raiz do CPF para cassinos online. Impossível cadastrar em qualquer plataforma de apostas. Pacotes de R$ 139,99 a R$ 500.">
+    <meta name="theme-color" content="#22c55e">
+    <link rel="canonical" href="https://exemplo.com/">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Bloqueio Governamental de CPF para Cassinos | Pare com as Apostas">
+    <meta property="og:description" content="Bloqueio governamental na raiz do CPF. Impossível cadastrar em qualquer cassino online. Pacotes de R$ 139,99 a R$ 500.">
+    <meta property="og:image" content="logo.svg">
+    <meta property="og:url" content="https://exemplo.com/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Bloqueio Governamental de CPF para Cassinos">
+    <meta name="twitter:description" content="Bloqueio governamental na raiz do CPF. Impossível cadastrar em qualquer cassino online.">
+    <meta name="twitter:image" content="logo.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="favicon.ico">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <div class="brand">
+                <img src="logo.svg" alt="Logo Anti Cassinos" class="logo" />
+                <span class="brand-name">Anti Cassinos</span>
+            </div>
+            <nav class="nav">
+                <a href="#como-funciona">Como funciona</a>
+                <a href="#beneficios">Benefícios</a>
+                <a href="#perguntas">FAQ</a>
+                <a href="#assinar" class="btn btn-primary small">Assinar</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-inner">
+                <div class="hero-copy">
+                    <h1>Proteção definitiva contra cassinos online</h1>
+                    <p>Bloqueio na raiz governamental que impede qualquer cadastro em plataformas de apostas online. Uma vez ativado, é impossível criar contas em qualquer cassino ou casa de apostas.</p>
+                    <ul class="bullets">
+                        <li>Bloqueio governamental na raiz do CPF</li>
+                        <li>Impossível cadastrar em qualquer plataforma de apostas</li>
+                        <li>Proteção permanente e irreversível</li>
+                        <li>Pacotes acessíveis de R$ 139,99 a R$ 500</li>
+                    </ul>
+                    <a href="#pacotes" class="btn btn-primary">Ver pacotes disponíveis</a>
+                    <p class="support-note">Precisa de ajuda? <a href="#perguntas">Veja o FAQ</a></p>
+                </div>
+                <form id="lead-form" class="card form-card" aria-labelledby="form-title">
+                    <h2 id="form-title">Comece agora</h2>
+                    <div class="form-row">
+                        <label for="nome">Nome completo</label>
+                        <input id="nome" name="nome" type="text" required autocomplete="name" placeholder="Seu nome completo" />
+                    </div>
+                    <div class="form-row">
+                        <label for="cpf">CPF</label>
+                        <input id="cpf" name="cpf" inputmode="numeric" maxlength="14" required placeholder="000.000.000-00" aria-describedby="cpf-help" />
+                        <small id="cpf-help" class="help">Usamos apenas para processar o bloqueio em plataformas de apostas.</small>
+                    </div>
+                    <div class="form-row">
+                        <label for="email">E‑mail</label>
+                        <input id="email" name="email" type="email" required autocomplete="email" placeholder="seu@email.com" />
+                    </div>
+                    <div class="form-row">
+                        <label for="telefone">Telefone (opcional)</label>
+                        <input id="telefone" name="telefone" type="tel" inputmode="tel" maxlength="15" placeholder="(00) 00000-0000" />
+                    </div>
+                    <div class="form-row">
+                        <label for="pacote">Escolha seu pacote</label>
+                        <select id="pacote" name="pacote" required>
+                            <option value="basico">Básico - R$ 139,99 (Bloqueio governamental)</option>
+                            <option value="intermediario">Intermediário - R$ 220 (Bloqueio + Anúncios)</option>
+                            <option value="completo">Completo - R$ 500 (Bloqueio + Acompanhamento)</option>
+                        </select>
+                    </div>
+                    <div class="price-box" role="note" aria-label="Preço">
+                        <span class="price" id="preco-display">R$ 139,99</span>
+                        <span class="price-sub">pagamento único</span>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block" id="submit-btn">
+                        <span class="btn-text">Continuar para pagamento</span>
+                        <span class="btn-loading" style="display: none;">Enviando...</span>
+                    </button>
+                    <p class="legal-mini">Ao continuar, você concorda com os <a href="#termos">Termos</a> e nossa <a href="#privacidade">Política de Privacidade</a>.</p>
+                </form>
+            </div>
+        </section>
+
+        <section id="como-funciona" class="section">
+            <div class="container">
+                <h2>Como funciona nossa proteção</h2>
+                <ol class="steps">
+                    <li>Você fornece seus dados e confirma o pagamento de forma segura</li>
+                    <li>Processamos sua solicitação junto ao governo para bloqueio na raiz do CPF</li>
+                    <li>O bloqueio é implementado no sistema, impedindo qualquer cadastro em plataformas de apostas</li>
+                    <li>Você recebe confirmação oficial do bloqueio por e‑mail</li>
+                </ol>
+                <div class="note-box">
+                    <p>Importante: o bloqueio é feito na raiz governamental do CPF, tornando impossível qualquer cadastro em plataformas de apostas online. Não afeta bancos, crédito ou serviços públicos.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pacotes" class="section alt">
+            <div class="container">
+                <h2>Escolha seu pacote de proteção</h2>
+                <div class="grid-3">
+                    <div class="card package">
+                        <div class="package-content">
+                            <h3>Pacote Básico</h3>
+                            <div class="price-tag">R$ 139,99</div>
+                            <ul>
+                                <li>Bloqueio governamental na raiz do CPF</li>
+                                <li>Impossível cadastrar em qualquer cassino online</li>
+                                <li>Proteção permanente e irreversível</li>
+                                <li>Ativação em até 24 horas</li>
+                            </ul>
+                        </div>
+                        <div class="package-actions">
+                            <a href="#form-title" class="btn btn-outline btn-block" data-pacote="basico">Escolher este pacote</a>
+                        </div>
+                    </div>
+                    
+                    <div class="card package featured">
+                        <div class="package-content">
+                            <h3>Pacote Intermediário</h3>
+                            <div class="price-tag">R$ 220</div>
+                            <ul>
+                                <li>Tudo do pacote básico</li>
+                                <li>Bloqueio de anúncios de cassinos</li>
+                                <li>Configuração de filtros anti-apostas</li>
+                                <li>Proteção em todos dispositivos</li>
+                                <li>Suporte prioritário</li>
+                            </ul>
+                        </div>
+                        <div class="package-actions">
+                            <a href="#form-title" class="btn btn-primary btn-block" data-pacote="intermediario">Escolher este pacote</a>
+                        </div>
+                    </div>
+                    
+                    <div class="card package">
+                        <div class="package-content">
+                            <h3>Pacote Completo</h3>
+                            <div class="price-tag">R$ 500</div>
+                            <ul>
+                                <li>Tudo do pacote intermediário</li>
+                                <li>Acompanhamento completo de 1 mês</li>
+                                <li>Especialista em vício em apostas</li>
+                                <li>Análise matemática dos métodos de vício</li>
+                                <li>Livros e materiais para superação</li>
+                                <li>Métodos comprovados para se livrar do vício</li>
+                            </ul>
+                        </div>
+                        <div class="package-actions">
+                            <a href="#form-title" class="btn btn-outline btn-block" data-pacote="completo">Escolher este pacote</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="perguntas" class="section">
+            <div class="container">
+                <h2>Perguntas frequentes</h2>
+                <div class="faq-grid">
+                    <details class="faq-item">
+                        <summary>O bloqueio governamental é realmente irreversível?</summary>
+                        <p>Sim. O bloqueio é feito na raiz governamental do CPF, tornando impossível qualquer cadastro em plataformas de apostas online. Uma vez implementado, não pode ser desfeito.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>Como funciona o bloqueio de anúncios?</summary>
+                        <p>Configuramos filtros nos seus dispositivos para bloquear anúncios de cassinos e casas de apostas, criando um ambiente livre dessas tentações.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>O que inclui o acompanhamento de 1 mês?</summary>
+                        <p>Especialista em vício em apostas, análise matemática dos métodos de vício, livros e materiais para superação, e métodos comprovados para se livrar do vício.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>Isso afeta meu CPF em bancos ou crédito?</summary>
+                        <p>Não. O bloqueio se limita apenas a plataformas de jogos e apostas online, não afetando bancos, crédito ou serviços públicos.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <section id="assinar" class="section cta">
+            <div class="container cta-inner">
+                <h2>Comece sua proteção hoje</h2>
+                <p>Milhares de pessoas já se protegeram contra cassinos online. Escolha seu pacote e garanta sua tranquilidade.</p>
+                <a href="#form-title" class="btn btn-primary btn-large">Escolher pacote agora</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <strong>Anti Cassinos</strong>
+                <p class="mini">Serviço de solicitação de bloqueio de CPF direcionado a plataformas de apostas online.</p>
+            </div>
+            <div>
+                <ul class="mini">
+                    <li><a href="#termos">Termos de Uso</a></li>
+                    <li><a href="#privacidade">Política de Privacidade</a></li>
+                    <li><a href="#contato" id="contato-link">Contato</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container legal">
+            <p class="mini">Aviso: Não realizamos bloqueios em sistemas governamentais. O serviço consiste em solicitar, em seu nome, a restrição de uso dos seus dados em plataformas privadas de jogos e apostas online, conforme melhores práticas e legislação aplicável.</p>
+        </div>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
