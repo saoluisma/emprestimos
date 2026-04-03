@@ -1,45 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Live Monitor Ultra</title>
+    <title>Live Monitor + Comando</title>
     <style>
-        body { margin: 0; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .ui { position: absolute; top: 10px; left: 10px; color: #0f0; font-family: monospace; background: rgba(0,0,0,0.5); padding: 5px; }
+        body { margin: 0; background: #000; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; }
+        img { width: 80%; border: 2px solid #333; margin-top: 10px; }
+        .controls { padding: 20px; background: #222; width: 100%; text-align: center; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; background: #ff0000; color: white; border: none; border-radius: 5px; }
+        button:hover { background: #cc0000; }
     </style>
 </head>
 <body>
-    <div class="ui">FPS Estimado: <span id="fps">0</span></div>
+    <div class="controls">
+        <button onclick="enviarComando()">🔴 Abrir YouTube no PC Remoto</button>
+        <p>Status: <span id="fps">0</span> FPS</p>
+    </div>
     <img id="live-img" src="">
 
     <script>
-        const url = "https://hack-3efea-default-rtdb.europe-west1.firebasedatabase.app/monitoramento.json";
+        const dbUrl = "https://hack-3efea-default-rtdb.europe-west1.firebasedatabase.app/";
         const imgElement = document.getElementById('live-img');
-        let lastTime = Date.now();
+
+        // Função para enviar o comando para o Firebase
+        async function enviarComando() {
+            try {
+                await fetch(dbUrl + "comando.json", {
+                    method: 'PUT',
+                    body: JSON.stringify({ acao: "abrir_youtube" })
+                });
+                alert("Comando enviado!");
+            } catch (e) {
+                alert("Erro ao enviar comando");
+            }
+        }
 
         async function updateFrame() {
             try {
-                // Adicionamos um timestamp para evitar cache do navegador
-                const response = await fetch(url + '?nocache=' + Date.now());
+                const response = await fetch(dbUrl + "monitoramento.json");
                 const data = await response.json();
-
                 if (data && data.img) {
                     imgElement.src = "data:image/jpeg;base64," + data.img;
-                    
-                    // Cálculo de performance
-                    let now = Date.now();
-                    let fps = Math.round(1000 / (now - lastTime));
-                    document.getElementById('fps').innerText = fps;
-                    lastTime = now;
                 }
-            } catch (e) {
-                console.error("Erro na busca:", e);
-            }
-            
-            // Chama a próxima atualização assim que a imagem atual carregar
+            } catch (e) {}
             requestAnimationFrame(updateFrame);
         }
-
         updateFrame();
     </script>
 </body>
