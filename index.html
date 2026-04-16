@@ -5,113 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca do Ridelvan</title>
     <style>
+        /* Estilos básicos para o iPad 2 */
         body {
-            background-color: #ffffff; /* Tema Branco */
-            color: #222;
+            background-color: #ffffff;
+            color: #333;
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             margin: 0;
-            padding: 40px 5%;
+            padding: 20px;
         }
 
         h1 {
+            font-size: 24px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
             text-align: left;
-            font-size: 32px;
-            font-weight: bold;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 20px;
-            margin-bottom: 40px;
         }
 
-        /* Grade que organiza tudo sozinho */
-        .estante {
-            display: grid;
-            /* Define o tamanho das capas (220px). Se quiser maior, aumente aqui */
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 50px 30px;
-            justify-items: center;
+        /* Container que organiza os livros em grade */
+        .biblioteca-container {
+            display: block;
+            text-align: center;
         }
 
-        .livro {
-            width: 220px; /* Largura fixa para manter a proporção */
+        /* Cada bloco de livro */
+        .livro-item {
+            display: inline-block; /* Faz os livros ficarem lado a lado */
+            vertical-align: top;
+            width: 180px; /* Largura ideal para caber vários na tela */
+            margin: 15px;
+            text-align: left;
             text-decoration: none;
             color: inherit;
-            transition: opacity 0.2s;
         }
 
-        /* Moldura para deixar todas as capas do mesmo tamanho */
-        .capa-moldura {
-            width: 100%;
-            height: 320px; /* Altura fixa para alinhar os livros lado a lado */
-            background-color: #f0f0f0;
+        /* A moldura da capa (Sempre na Vertical) */
+        .capa-box {
+            width: 180px;
+            height: 260px; /* Altura maior que a largura = Vertical */
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
             border-radius: 4px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            box-shadow: 3px 5px 10px rgba(0,0,0,0.1);
             overflow: hidden;
-            border: 1px solid #ddd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin-bottom: 10px;
         }
 
-        .capa-moldura img {
+        .capa-box img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Faz a imagem preencher a moldura sem deformar */
-        }
-
-        .info {
-            margin-top: 15px;
-            text-align: left;
+            object-fit: cover; /* Ajusta a imagem sem esticar */
         }
 
         .titulo {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             display: block;
-            margin-bottom: 5px;
             line-height: 1.2;
         }
 
         .autor {
-            font-size: 14px;
-            color: #666;
+            font-size: 13px;
+            color: #777;
+            display: block;
+            margin-top: 3px;
         }
 
-        /* Efeito de toque para o iPad */
-        .livro:active {
-            opacity: 0.6;
+        /* Feedback ao tocar no iPad */
+        .livro-item:active {
+            opacity: 0.5;
         }
-
     </style>
 </head>
 <body>
 
     <h1>Biblioteca do Ridelvan</h1>
 
-    <div class="estante">
+    <div class="biblioteca-container">
 
-        <!-- LIVRO 1: VIDA PARA CONSUMO -->
-        <a href="livro1.pdf.pdf" class="livro">
-            <div class="capa-moldura">
-                <img src="capa1.jpg.png" alt="Capa Vida para Consumo">
+        <!-- LIVRO 1 -->
+        <a href="livro1.pdf.pdf" class="livro-item">
+            <div class="capa-box">
+                <img src="capa1.jpg.png" alt="Capa">
             </div>
-            <div class="info">
-                <span class="titulo">Vida para Consumo</span>
-                <span class="autor">Zygmunt Bauman</span>
-            </div>
+            <span class="titulo">Vida para Consumo</span>
+            <span class="autor">Zygmunt Bauman</span>
         </a>
 
-        <!-- LIVRO 2: HISTÓRIA DO BRASIL -->
-        <a href="livro2.pdf.pdf" class="livro">
-            <div class="capa-moldura">
-                <img src="capa2.jpg.png" alt="Capa História do Brasil">
+        <!-- LIVRO 2 -->
+        <a href="livro2.pdf.pdf" class="livro-item">
+            <div class="capa-box">
+                <img src="capa2.jpg.png" alt="Capa">
             </div>
-            <div class="info">
-                <span class="titulo">A História do Brasil</span>
-                <span class="autor">Marcos Costa</span>
-            </div>
+            <span class="titulo">A História do Brasil</span>
+            <span class="autor">Marcos Costa</span>
         </a>
 
-        <!-- QUANDO QUISER ADICIONAR MAIS, COPIE DO <a href...> ATÉ </a> E COLE ABAIXO -->
+        <!-- PARA ADICIONAR MAIS: 
+             Basta copiar o bloco de um livro e colar aqui embaixo, 
+             mudando o link do PDF e o nome da imagem da capa. -->
 
     </div>
 
