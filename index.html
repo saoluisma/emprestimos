@@ -1,50 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-    <title>Live Monitor + Comando</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca do Ridelvan</title>
     <style>
-        body { margin: 0; background: #000; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; }
-        img { width: 80%; border: 2px solid #333; margin-top: 10px; }
-        .controls { padding: 20px; background: #222; width: 100%; text-align: center; }
-        button { padding: 10px 20px; font-size: 16px; cursor: pointer; background: #ff0000; color: white; border: none; border-radius: 5px; }
-        button:hover { background: #cc0000; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            font-weight: 300;
+            margin-bottom: 40px;
+            color: #000;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+        .livro {
+            width: 180px;
+            transition: transform 0.2s;
+        }
+        .livro img {
+            width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+        }
+        .livro p {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        /* Otimização para toque no iPad */
+        .livro:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 <body>
-    <div class="controls">
-        <button onclick="enviarComando()">🔴 Abrir YouTube no PC Remoto</button>
-        <p>Status: <span id="fps">0</span> FPS</p>
+
+    <h1>Biblioteca do Ridelvan</h1>
+
+    <div class="grid">
+        <!-- Livro 1 -->
+        <a href="livro1.pdf" class="livro">
+            <img src="capa1.jpg" alt="Vida para Consumo">
+            <p>Vida para Consumo<br><small>Zygmunt Bauman</small></p>
+        </a>
+
+        <!-- Livro 2 -->
+        <a href="livro2.pdf" class="livro">
+            <img src="capa2.jpg" alt="História do Brasil">
+            <p>História do Brasil<br><small>Marcos Costa</small></p>
+        </a>
     </div>
-    <img id="live-img" src="">
 
-    <script>
-        const dbUrl = "https://hack-3efea-default-rtdb.europe-west1.firebasedatabase.app/";
-        const imgElement = document.getElementById('live-img');
-
-        // Função para enviar o comando para o Firebase
-        async function enviarComando() {
-            try {
-                await fetch(dbUrl + "comando.json", {
-                    method: 'PUT',
-                    body: JSON.stringify({ acao: "abrir_youtube" })
-                });
-                alert("Comando enviado!");
-            } catch (e) {
-                alert("Erro ao enviar comando");
-            }
-        }
-
-        async function updateFrame() {
-            try {
-                const response = await fetch(dbUrl + "monitoramento.json");
-                const data = await response.json();
-                if (data && data.img) {
-                    imgElement.src = "data:image/jpeg;base64," + data.img;
-                }
-            } catch (e) {}
-            requestAnimationFrame(updateFrame);
-        }
-        updateFrame();
-    </script>
 </body>
 </html>
