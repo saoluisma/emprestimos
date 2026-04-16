@@ -2,71 +2,130 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Biblioteca do Ridelvan</title>
     <style>
+        :root {
+            --bg-color: #f5f5f7;
+            --shelf-color: #e2e2e2;
+        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #ffffff;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
             margin: 0;
-            padding: 20px;
+            padding: 40px 20px;
+            color: #1d1d1f;
+        }
+        header {
+            margin-bottom: 50px;
             text-align: center;
         }
         h1 {
-            font-weight: 300;
-            margin-bottom: 40px;
-            color: #000;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
         }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        /* Estilização da Estante */
         .grid {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 30px;
+            gap: 40px;
+            padding-bottom: 20px;
+            border-bottom: 8px solid var(--shelf-color); /* Linha que imita a prateleira */
+            perspective: 1000px;
         }
         .livro {
-            width: 180px;
-            transition: transform 0.2s;
+            width: 160px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .capa-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 2/3;
+            background: #eee;
+            border-radius: 2px 5px 5px 2px;
+            box-shadow: 
+                5px 5px 15px rgba(0,0,0,0.2),
+                inset 2px 0 3px rgba(255,255,255,0.3); /* Brilho na lombada */
+            overflow: hidden;
+            border-left: 4px solid rgba(0,0,0,0.1); /* Efeito de profundidade da lombada */
         }
         .livro img {
             width: 100%;
-            border-radius: 5px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            border: 1px solid #ddd;
+            height: 100%;
+            object-fit: cover;
         }
-        .livro p {
-            margin-top: 10px;
-            font-size: 14px;
-            font-weight: bold;
+        .info {
+            margin-top: 15px;
+            text-align: center;
         }
-        a {
-            text-decoration: none;
-            color: inherit;
+        .titulo {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: block;
         }
-        /* Otimização para toque no iPad */
+        .autor {
+            font-size: 13px;
+            color: #86868b;
+        }
+
+        /* Feedback visual ao tocar no iPad */
         .livro:active {
-            transform: scale(0.95);
+            transform: scale(0.92) translateY(5px);
+            opacity: 0.8;
+        }
+
+        /* Ajuste para telas menores */
+        @media (max-width: 480px) {
+            .livro { width: 140px; }
         }
     </style>
 </head>
 <body>
 
-    <h1>Biblioteca do Ridelvan</h1>
+    <header>
+        <h1>Biblioteca do Ridelvan</h1>
+    </header>
 
-    <div class="grid">
-        <!-- Livro 1 -->
-        <a href="livro1.pdf.pdf" class="livro">
-            <img src="capa1.jpg.jpg" alt="Vida para Consumo">
-            <p>Vida para Consumo<br><small>Zygmunt Bauman</small></p>
-        </a>
+    <div class="container">
+        <div class="grid">
+            
+            <!-- Livro 1 -->
+            <a href="livro1.pdf.pdf" class="livro">
+                <div class="capa-container">
+                    <!-- ATENÇÃO: Ajustei para o nome exato do seu arquivo no print -->
+                    <img src="capa1.jpg.png" alt="Vida para Consumo">
+                </div>
+                <div class="info">
+                    <span class="titulo">Vida para Consumo</span>
+                    <span class="autor">Zygmunt Bauman</span>
+                </div>
+            </a>
 
-        <!-- Livro 2 -->
-        <a href="livro2.pdf.pdf" class="livro">
-            <img src="capa2.jpg.jpg" alt="História do Brasil">
-            <p>História do Brasil<br><small>Marcos Costa</small></p>
-        </a>
+            <!-- Livro 2 -->
+            <a href="livro2.pdf.pdf" class="livro">
+                <div class="capa-container">
+                    <!-- ATENÇÃO: Ajustei para o nome exato do seu arquivo no print -->
+                    <img src="capa2.jpg.png" alt="História do Brasil">
+                </div>
+                <div class="info">
+                    <span class="titulo">História do Brasil</span>
+                    <span class="autor">Marcos Costa</span>
+                </div>
+            </a>
+
+        </div>
     </div>
 
 </body>
